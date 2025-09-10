@@ -30,6 +30,12 @@ makeCacheMatrix <- function(x = matrix()) {
     # function to get the inverse of matrix x
     get_inverse <- function() x_inv
     
+    # Returns a list containing the fuctions to set and get the values for the
+    # extended matrix
+    list(set = set, get = get,
+         set_inverse = set_inverse,
+         get_inverse = get_inverse)
+    
 }
 
 
@@ -38,6 +44,22 @@ makeCacheMatrix <- function(x = matrix()) {
 ## been calculated before otherwise it returns the inverse matrix stored in the makeCacheMatrix function.
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
+    # get the inverse from x and check if it's been calculated before
+    # if it was, returns it
+    x_inv <- x$get_inverse()
+    if (!is.null(x_inv)){
+        message("getting cached inverse")
+        return(x_inv)
+    }
     
+    # calculates the inverse
+    matrix_to_invert <- x$get()
+    inverse_matrix <- solve(matrix_to_invert)
+    
+    # stores the inverse for future calculations
+    x$set_inverse(inverse_matrix)
+    
+    # Returns the inverse
+    inverse_matrix
     
 }
